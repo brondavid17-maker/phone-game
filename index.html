@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Мастерская телефонов</title>
+<style>
+:root{--bg:#f1f3ee;--bench:#1d2733;--card:#fff;--ink:#16202a;--mute:#5d6b78;--line:#d5dbd2;--acc:#ffc928;--ok:#1f9d63;--scr:#8fe9ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161d;--bench:#0a0f14;--card:#1a232d;--ink:#eef2f5;--mute:#93a1ae;--line:#2b3846;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10161d;--bench:#0a0f14;--card:#1a232d;--ink:#eef2f5;--mute:#93a1ae;--line:#2b3846;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 "Trebuchet MS","Segoe UI",system-ui,sans-serif}
+main{max-width:520px;margin:0 auto;padding:12px}
+header{display:flex;justify-content:space-between;align-items:baseline;padding:4px 2px 10px}
+h1{font-size:20px;margin:0}
+.money{font-size:26px;font-weight:700;color:var(--ok)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{font-size:16px;margin:0 0 10px}
+.mute{color:var(--mute);font-size:14px}
+.bench{position:relative;overflow:hidden;border-radius:14px;padding:18px;margin-bottom:12px;text-align:center;color:#eef2f5;background:radial-gradient(ellipse at 50% 35%,rgba(255,201,40,.22),transparent 62%),repeating-linear-gradient(90deg,#2b3643 0 46px,#242d39 46px 48px);box-shadow:inset 0 -30px 40px rgba(0,0,0,.35)}.deco{position:absolute;pointer-events:none}
+.phone{width:150px;height:270px;margin:8px auto 12px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;position:relative}
+.phone:active{transform:scale(.97)}
+.screen{width:100%;height:100%}.screen svg{width:100%;height:100%;display:block;filter:drop-shadow(0 14px 12px rgba(0,0,0,.55))}
+.phone.tap{animation:sh .18s}@keyframes sh{25%{transform:translateX(-4px) rotate(-1.5deg)}75%{transform:translateX(4px) rotate(1.5deg)}}.fl{position:absolute;left:50%;top:38%;font-weight:700;font-size:22px;color:var(--acc);text-shadow:0 2px 6px #000;animation:fl 1.1s forwards;pointer-events:none}@keyframes fl{from{transform:translate(-50%,0)}to{transform:translate(-50%,-90px);opacity:0}}.sp{position:absolute;left:50%;top:50%;width:7px;height:7px;border-radius:50%;background:var(--acc);animation:spk .5s forwards;pointer-events:none}@keyframes spk{to{transform:translate(var(--dx),var(--dy));opacity:0}}.prev{display:flex;gap:14px;justify-content:center;margin:6px 0 12px}.prev svg{width:100px;height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+.bar{height:12px;background:#33414f;border-radius:6px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;width:0;background:var(--acc)}
+.fault{font-weight:700;font-size:17px}
+button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:11px 14px;background:var(--acc);color:#1a1a1a;cursor:pointer;min-height:44px}
+button:disabled{opacity:.45;cursor:default}
+button.alt{background:transparent;border:2px solid var(--line);color:var(--ink)}.tab{flex:1;padding:8px 4px;font-size:14px}.tab.on{background:var(--acc);border-color:var(--acc);color:#1a1a1a}
+button:focus-visible,select:focus-visible,input:focus-visible,.phone:focus-visible{outline:3px solid #2d7ff9;outline-offset:2px}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap}
+.row label{flex:1 1 120px}
+select,input[type=text]{font:inherit;padding:9px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);flex:1 1 150px;min-height:44px}
+input[type=range]{width:100%}
+.stat{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)}
+.stat:last-child{border:0}
+.log{font-size:13px;color:var(--mute);min-height:20px}
+.hide{display:none}
+@media(prefers-reduced-motion:reduce){.phone:active{transform:none}.phone.tap,.fl,.sp{animation:none}}
+</style>
+</head>
+<body>
+<main>
+<header><h1 id="title">Мастерская телефонов</h1><div class="money" id="money">0 ₽</div></header>
+
+<section class="bench">
+  <svg class="deco" style="left:8px;bottom:18px;width:80px;transform:rotate(-24deg)" viewBox="0 0 70 24" aria-hidden="true"><rect x="0" y="6" width="30" height="12" rx="6" fill="#ffc928"/><rect x="28" y="10" width="38" height="4" fill="#aeb9c4"/><rect x="62" y="9" width="6" height="6" fill="#8793a0"/></svg>
+  <svg class="deco" style="right:10px;bottom:16px;width:56px" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16" fill="none" stroke="#5c6c7c" stroke-width="8" stroke-dasharray="6 5.2"/><circle cx="24" cy="24" r="12" fill="#3a4856"/><circle cx="24" cy="24" r="5" fill="#242d39"/></svg>
+  <div class="fault" id="fault"></div>
+  <div class="phone broken" id="phone" role="button" tabindex="0" aria-label="Чинить телефон"><div class="screen" id="ico">📱</div></div>
+  <div class="bar"><i id="prog"></i></div>
+  <p class="mute" style="color:#9fb0bf;margin:8px 0 0">Жми на телефон, чтобы чинить</p>
+</section>
+
+<section class="card">
+  <h2>Мастерская</h2>
+  <div class="row"><span>Инструмент (уровень <b id="tl">1</b>)</span><button id="bTool"></button></div>
+  <div class="row"><span>Мастера (<b id="tc">0</b>), чинят сами</span><button id="bTech"></button></div>
+  <div class="mute">Починено телефонов: <b id="rep">0</b></div>
+</section>
+
+<section class="card" id="lock">
+  <h2>Своя компания</h2>
+  <p class="mute" style="margin:0">Откроется после 15 починенных телефонов: <b id="left">15</b> осталось.</p>
+</section>
+
+<section class="card hide" id="co">
+  <h2>Компания «<span id="cn"></span>»</h2>
+  <div class="row"><input type="text" id="nameIn" maxlength="16" placeholder="Название бренда" aria-label="Название бренда"><button class="alt" id="bName">Сменить</button></div>
+  <h2 style="margin-top:14px">Модель</h2>
+  <div class="prev" id="prev" aria-hidden="true"></div>
+  <div class="row" id="tabs"></div>
+  <div class="row"><label for="p0">Экран</label><select id="p0"></select></div>
+  <div class="row"><label for="p1">Батарея</label><select id="p1"></select></div>
+  <div class="row"><label for="p2">Камера</label><select id="p2"></select></div>
+  <div class="row"><label for="p3">Процессор</label><select id="p3"></select></div>
+  <div class="stat"><span>Себестоимость</span><b id="cost"></b></div>
+  <div class="stat"><span>Справедливая цена</span><b id="fair"></b></div>
+  <div style="margin-top:10px"><label for="price">Твоя цена: <b id="pv"></b></label><input type="range" id="price" min="30" max="900" step="10"></div>
+  <div class="row" style="margin-top:10px"><button id="bMake"></button><span class="mute">На складе: <b id="stock">0</b></span></div>
+  <div class="stat"><span>Продано</span><b id="sold">0</b></div>
+  <div class="stat"><span>Известность бренда</span><b id="fame">0</b></div>
+  <div class="stat"><span>Спрос сейчас</span><b id="dem">0</b></div>
+  <p class="log" id="log"></p>
+</section>
+<button class="alt" id="reset" style="width:100%">Начать заново</button>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const TIERS=[["Базовый",5],["Средний",12],["Хороший",25],["Флагман",45]];
+const FAULTS=[["Разбитый экран","🔨"],["Не заряжается","🔋"],["Залит водой","💧"],["Не включается","⚡"],["Треснула камера","📷"]];
+const KEY="phonetycoon1";
+const fresh=()=>({m:0,tool:1,tech:0,rep:0,co:false,name:"Мой бренд",sel:0,fame:0,models:[{n:"Бюджет",parts:[0,0,0,0],price:100,stock:0,sold:0,w:1.2},{n:"Стандарт",parts:[1,1,1,1],price:250,stock:0,sold:0,w:.8},{n:"Флагман",parts:[3,3,3,3],price:600,stock:0,sold:0,w:.5}]});
+let s=fresh();
+try{const r=localStorage.getItem(KEY);if(r)s=Object.assign(fresh(),JSON.parse(r))}catch(e){}
+let job=null,acc=0,logT="";
+const rub=n=>Math.floor(n).toLocaleString("ru-RU")+" ₽";
+function newJob(){const f=FAULTS[Math.floor(Math.random()*FAULTS.length)];const hp=6+Math.min(30,Math.floor(s.rep/3));job={n:f[0],i:f[1],hp,p:0,pay:hp*4+Math.floor(Math.random()*15)};$("fault").textContent=job.n;$("ico").textContent=job.i}
+function work(x){job.p+=x;if(job.p>=job.hp){s.m+=job.pay;s.rep++;flo("+"+rub(job.pay));newJob()}draw()}
+const toolCost=()=>40*Math.pow(2,s.tool-1);
+const techCost=()=>120*Math.pow(2,s.tech);
+const M=()=>s.models[s.sel];
+const unit=(m=M())=>m.parts.reduce((a,t)=>a+TIERS[t][1],0);
+const fair=(m=M())=>80+m.parts.reduce((a,t)=>a+t,0)*35;
+const demand=(m=M())=>{const f=fair(m);return Math.max(0,(0.3+s.fame*0.04)*m.w*((2*f-m.price)/f))};
+const CH=[["#5b6b7c","#2d3a48"],["#3aa0ff","#1b4fd8"],["#9b6bff","#4b2bd6"],["#ff7a59","#d6246e"]];
+function fx(){const p=$("phone");p.classList.remove("tap");void p.offsetWidth;p.classList.add("tap");const b=document.querySelector(".bench");for(let i=0;i<6;i++){const e=document.createElement("i");e.className="sp";const a=Math.random()*6.28,r=60+Math.random()*50;e.style.setProperty("--dx",Math.cos(a)*r+"px");e.style.setProperty("--dy",Math.sin(a)*r+"px");b.appendChild(e);setTimeout(()=>e.remove(),500)}}
+function flo(t){const e=document.createElement("div");e.className="fl";e.textContent=t;document.querySelector(".bench").appendChild(e);setTimeout(()=>e.remove(),1100)}
+function phoneSVG(o){
+ const d=Math.max(0,1-o.p),b=o.b,id=o.id,f=o.f,c=o.c,W=150-2*b,H=270-2*b,R=26-b;
+ let g='<svg viewBox="0 0 150 270"><defs><linearGradient id="w'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+c[0]+'"/><stop offset="1" stop-color="'+c[1]+'"/></linearGradient><linearGradient id="d'+id+'" x1="0" x2="1"><stop offset="0" stop-color="#6a7b8d"/><stop offset=".5" stop-color="#27323e"/><stop offset="1" stop-color="#53647a"/></linearGradient></defs>';
+ g+='<rect x="2" y="2" width="146" height="266" rx="26" fill="url(#d'+id+')"/><rect x="'+b+'" y="'+b+'" width="'+W+'" height="'+H+'" rx="'+R+'" fill="url(#w'+id+')"/>';
+ g+='<text x="75" y="70" text-anchor="middle" font-size="30" font-weight="700" fill="#fff" font-family="Trebuchet MS,sans-serif">9:41</text>';
+ if(o.name)g+='<text x="75" y="100" text-anchor="middle" font-size="13" fill="#fff" opacity=".9" font-family="Trebuchet MS,sans-serif">'+o.name.replace(/[<>&"]/g,'')+'</text>';
+ for(let i=0;i<8;i++)g+='<rect x="'+(20+(i%4)*29)+'" y="'+(130+Math.floor(i/4)*34)+'" width="22" height="22" rx="6" fill="#fff" opacity="'+(.35+(i%3)*.15)+'"/>';
+ g+='<rect x="30" y="218" width="90" height="26" rx="13" fill="#fff" opacity=".25"/><rect x="58" y="'+(b+3)+'" width="34" height="9" rx="4.5" fill="#0b1118"/>';
+ const ov=(op,col)=>'<rect x="'+b+'" y="'+b+'" width="'+W+'" height="'+H+'" rx="'+R+'" fill="'+col+'" opacity="'+op+'"/>';
+ if(f==="Не включается")g+=ov(d*.96,"#05080c")+'<path d="M80 90 L62 140 L78 140 L66 190 L98 128 L82 128 L92 90Z" fill="#ffc928" opacity="'+d+'"/>';
+ if(f==="Разбитый экран")g+='<path d="M95 90 L40 40 M95 90 L130 30 M95 90 L120 170 M95 90 L30 150 M95 90 L70 240 M60 65 L28 92 M110 130 L142 142 M70 205 L112 225" stroke="#fff" stroke-width="2" fill="none" opacity="'+d+'"/><circle cx="95" cy="90" r="6" fill="#fff" opacity="'+d*.7+'"/>';
+ if(f==="Залит водой"){g+=ov(d*.45,"#b9dcff");[[40,80,9],[100,60,6],[70,150,12],[110,190,8],[35,210,7],[95,120,5]].forEach(p=>g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+p[2]+'" fill="#5fb4ff" stroke="#fff" stroke-width="1.5" opacity="'+d+'"/>')}
+ if(f==="Не заряжается")g+=ov(d*.6,"#05080c")+'<g opacity="'+d+'"><rect x="40" y="110" width="62" height="34" rx="7" fill="none" stroke="#ff4d4d" stroke-width="4"/><rect x="45" y="115" width="10" height="24" rx="3" fill="#ff4d4d"/><rect x="102" y="120" width="6" height="14" rx="2" fill="#ff4d4d"/></g>';
+ if(f==="Треснула камера")g+='<circle cx="75" cy="'+(b+7.5)+'" r="16" fill="none" stroke="#ff4d4d" stroke-width="2" opacity="'+d+'"/><path d="M75 14 L58 44 M75 14 L96 40 M75 14 L75 56 M75 14 L48 26" stroke="#fff" stroke-width="2" fill="none" opacity="'+d+'"/>';
+ return g+'</svg>'}
+function backSVG(m){
+ const c=CH[m.parts[3]],n=m.parts[2]+1,P=[[34,34],[64,34],[34,66],[64,66]];
+ let g='<svg viewBox="0 0 150 270"><defs><linearGradient id="bk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+c[0]+'"/><stop offset="1" stop-color="'+c[1]+'"/></linearGradient></defs><rect x="2" y="2" width="146" height="266" rx="26" fill="url(#bk)"/><rect x="14" y="14" width="66" height="'+(n>2?84:52)+'" rx="18" fill="#0b1118" opacity=".85"/>';
+ for(let i=0;i<n;i++)g+='<circle cx="'+P[i][0]+'" cy="'+P[i][1]+'" r="12" fill="#1c2733" stroke="#9fb0c0" stroke-width="2"/><circle cx="'+P[i][0]+'" cy="'+P[i][1]+'" r="5" fill="#4fb8ff"/>';
+ return g+'<text x="75" y="200" text-anchor="middle" font-size="17" font-weight="700" fill="#fff" opacity=".9" font-family="Trebuchet MS,sans-serif">'+s.name.replace(/[<>&"]/g,'')+'</text><text x="75" y="224" text-anchor="middle" font-size="12" fill="#fff" opacity=".75" font-family="Trebuchet MS,sans-serif">'+m.n+'</text></svg>'}
+function draw(){
+  $("money").textContent=rub(s.m);
+  $("ico").innerHTML=phoneSVG({id:"b",f:job.n,p:Math.min(1,job.p/job.hp),b:8,c:CH[1],name:""});
+  $("prog").style.width=Math.min(100,job.p/job.hp*100)+"%";
+  $("tl").textContent=s.tool;$("tc").textContent=s.tech;$("rep").textContent=s.rep;
+  $("bTool").textContent="Улучшить: "+rub(toolCost());$("bTool").disabled=s.m<toolCost();
+  $("bTech").textContent="Нанять: "+rub(techCost());$("bTech").disabled=s.m<techCost();
+  if(s.rep>=15)s.co=true;
+  $("lock").classList.toggle("hide",s.co);$("co").classList.toggle("hide",!s.co);
+  $("left").textContent=Math.max(0,15-s.rep);
+  if(!s.co)return;
+  const m=M();$("title").textContent=s.name;$("cn").textContent=s.name;$("prev").innerHTML=phoneSVG({id:"p",f:null,p:1,b:[12,10,8,6][m.parts[0]],c:CH[m.parts[3]],name:s.name})+backSVG(m);
+  $("cost").textContent=rub(unit(m));$("fair").textContent=rub(fair(m));$("pv").textContent=rub(m.price);
+  $("bMake").textContent="Выпустить 10 шт: "+rub(unit(m)*10);$("bMake").disabled=s.m<unit(m)*10;
+  $("stock").textContent=m.stock;$("sold").textContent=s.models.reduce((a,x)=>a+x.sold,0);
+  $("fame").textContent=s.fame.toFixed(1);$("dem").textContent=demand(m).toFixed(1)+" шт/с";
+  document.querySelectorAll(".tab").forEach((b,i)=>{const x=s.models[i];b.textContent=x.n+" "+rub(x.price);b.classList.toggle("on",i===s.sel)});
+  $("log").textContent=logT;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+$("phone").addEventListener("click",()=>{fx();work(s.tool)});
+$("phone").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();work(s.tool)}});
+$("bTool").onclick=()=>{if(s.m>=toolCost()){s.m-=toolCost();s.tool++;draw()}};
+$("bTech").onclick=()=>{if(s.m>=techCost()){s.m-=techCost();s.tech++;draw()}};
+$("bName").onclick=()=>{const v=$("nameIn").value.trim();if(v){s.name=v;$("nameIn").value="";draw()}};
+$("bMake").onclick=()=>{const m=M(),c=unit(m)*10;if(s.m>=c){s.m-=c;m.stock+=10;logT=m.n+": партия готова. Следи за ценой.";draw()}};
+$("price").oninput=e=>{M().price=+e.target.value;draw()};
+const sync=()=>{for(let i=0;i<4;i++)$("p"+i).value=M().parts[i];$("price").value=M().price};
+for(let i=0;i<4;i++){const el=$("p"+i);TIERS.forEach((t,j)=>el.add(new Option(t[0]+" ("+t[1]+" ₽)",j)));el.onchange=()=>{M().parts[i]=+el.value;draw()}}
+s.models.forEach((m,i)=>{const b=document.createElement("button");b.className="alt tab";b.onclick=()=>{s.sel=i;sync();draw()};$("tabs").appendChild(b)});
+sync();
+$("reset").onclick=()=>{if(confirm("Начать заново? Прогресс пропадёт.")){s=fresh();sync();newJob();draw();save()}};
+setInterval(()=>{
+  if(s.tech)work(s.tech*0.5*s.tool);
+  if(s.co)s.models.forEach(m=>{
+    if(m.stock<=0)return;
+    m.acc=(m.acc||0)+demand(m);let n=Math.floor(m.acc);m.acc-=n;n=Math.min(n,m.stock);
+    if(n>0){m.stock-=n;m.sold+=n;s.m+=n*m.price;
+      if(m.price<=fair(m)*1.1)s.fame+=n*0.05;
+      logT=m.price>fair(m)*1.1?m.n+": дорого для такого телефона, бренд не растёт.":m.n+": покупатели довольны, бренд растёт."}
+    if(m.stock===0)logT=m.n+": склад пуст, выпусти партию.";
+  });
+  draw();
+},1000);
+setInterval(save,5000);
+newJob();draw();
+</script>
+</body>
+</html>
